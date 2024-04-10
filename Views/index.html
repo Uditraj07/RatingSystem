@@ -27,16 +27,21 @@
         </form>   
    </div>
 
-   <div id="get_rating">
-        <form action="">
+   <div id="get_rating" class="w-[400px] mx-auto">
+        <form action="" class=" rounded-lg border-2 border-solid border-black flex flex-col justify-center">
             <label for="name">Company Name</label>
-            <input type="text" name="name" id="" placeholder="Enter Company Name" class="p-4">
+            <input type="text" name="name" id="" placeholder="Enter Company Name" class="p-4 mx-2 border-2 border-solid border-black rounded-lg w-full">
             <button class="p-3 rounded-lg ">Search</button>
         </form>
    </div>
    <div>
         <div class="details p-3 my-2 bg-purple-500" id="average">
+           
+        </div>
+        <div>
+            <ul id="reviewList" class="flex flex-col gap-y-2 bg-pink-500 justify-center items-center text-center text-black">
 
+            </ul>
         </div>
    </div>
 </body>
@@ -81,6 +86,7 @@
             let sum=0;
             ratingDetails.forEach((ratingDetail)=>{
                 sum+=ratingDetail.rating
+                addTolist(ratingDetail)
             })
             let length=Array.from(ratingDetails).length
             addCompanyDetails(companyName,Math.round(sum/length));
@@ -89,14 +95,35 @@
 
     function addCompanyDetails(companyName,averageRating){
         let div=document.querySelector("#average");
+        div.innerHTML="";
+        let mainDiv=document.querySelector('div');
         let div1=document.createElement("div");
         div1.innerHTML=companyName;
         let div2=document.createElement('div');
         div2.innerHTML=averageRating+"";
-        div.append(div1);
-        div.append(div2)
+        mainDiv.append(div1);
+        mainDiv.append(div2)
+        div.append(mainDiv);
     }
 
+    function addTolist(ratingDetails){
+        let ul=document.querySelector("#reviewList");
+        ul.innerHTML="";
+        let li=document.createElement('ul');
+        let p=document.createElement('p');
+        p.innerText=`company:${ratingDetails.companyName}`;
+        li.append(p);
+        let p1=document.createElement('p');
+        p1.innerText=`pro:${ratingDetails.pro}`;
+        li.append(p1);
+        let p2=document.createElement('p');
+        p2.innerText=`cons:${ratingDetails.cons}`;
+        li.append(p2);
+        let p3=document.createElement('p');
+        p3.innerText=`rating:${ratingDetails.rating}`;
+        li.append(p3);
+        ul.append(li);
+    }
     function changeColor(buttons,index){
         for(let i=0;i<=index;i++){
             buttons[i].classList.add('text-yellow-600');
