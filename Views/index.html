@@ -50,31 +50,40 @@
 <script>
     let form_par=document.querySelector('#post-rating');
     let form=form_par.querySelector('form');
-    form.addEventListener('submit',(event)=>{
-        event.preventDefault()
-        let companyName=event.target.name.value;
-        let pros=form.querySelector("#pro").value;
-        let cons=form.querySelector("#cons").value;
-        let buttons=form.querySelectorAll('button');
-        buttons.forEach((button,index)=>{
-            button.addEventListener('click',(event)=>{
-                event.preventDefault();
-                ratingDetails={
-                    companyName:companyName,
-                    pro:pros,
-                    cons:cons,
-                    rating:index+1
-                }
-                changeColor(buttons,index)
-                submitRating(ratingDetails).then((result)=>{
-                    console.log(result);
-                }).catch((error)=>{
-                    console.log(error)
-                })
+    let buttons=form.querySelectorAll('button');
+    buttons.forEach((button, index) => {
+    button.addEventListener('click', (event) => {
+        changeColor(buttons, index);
+        });
+    });
+    form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    let companyName = event.target.name.value;
+    let pros = form.querySelector("#pro").value;
+    let cons = form.querySelector("#cons").value;
+    let rating = 0;
+    buttons.forEach((button) => {
+        if (button.classList.contains('text-yellow-600')) {
+            rating++;
+        }
+    });
+    if (rating>0){
+        let ratingDetails = {
+            companyName: companyName,
+            pro: pros,
+            cons: cons,
+            rating: rating
+        };
+        submitRating(ratingDetails)
+            .then((result) => {
             })
-        })
-    })
-
+            .catch((error) => {
+                console.log(error);
+            });
+    } else {
+        console.log('Please select a rating before submitting.');
+    }
+});
     let form_get=document.querySelector('#get_rating');
     let form1=form_get.querySelector('form');
     form1.addEventListener('submit',(event)=>{
