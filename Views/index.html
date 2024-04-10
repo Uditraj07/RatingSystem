@@ -28,9 +28,9 @@
    </div>
 
    <div id="get_rating" class="w-[400px] mx-auto">
-        <form action="" class=" rounded-lg border-2 border-solid border-black flex flex-col justify-center">
+        <form action="" class=" rounded-lg border-2 border-solid border-black flex flex-col justify-center text-center">
             <label for="name">Company Name</label>
-            <input type="text" name="name" id="" placeholder="Enter Company Name" class="p-4 mx-2 border-2 border-solid border-black rounded-lg w-full">
+            <input type="text" name="name" id="" placeholder="Enter Company Name" class="p-4 mx-2 border-2 border-solid border-black rounded-lg ">
             <button class="p-3 rounded-lg ">Search</button>
         </form>
    </div>
@@ -79,13 +79,17 @@
     let form1=form_get.querySelector('form');
     form1.addEventListener('submit',(event)=>{
         event.preventDefault()
+        let ul=document.querySelector("#reviewList");
+        ul.innerHTML="";
+        let div=document.querySelector("#average");
+        div.innerHTML="";
         let companyName=event.target.name.value;
-        console.log(companyName)
         fetchByName(companyName).then((result)=>{
             let ratingDetails=result.data;
             let sum=0;
             ratingDetails.forEach((ratingDetail)=>{
                 sum+=ratingDetail.rating
+                console.log(ratingDetail.rating)
                 addTolist(ratingDetail)
             })
             let length=Array.from(ratingDetails).length
@@ -95,8 +99,7 @@
 
     function addCompanyDetails(companyName,averageRating){
         let div=document.querySelector("#average");
-        div.innerHTML="";
-        let mainDiv=document.querySelector('div');
+        let mainDiv=document.createElement('div');
         let div1=document.createElement("div");
         div1.innerHTML=companyName;
         let div2=document.createElement('div');
@@ -108,7 +111,6 @@
 
     function addTolist(ratingDetails){
         let ul=document.querySelector("#reviewList");
-        ul.innerHTML="";
         let li=document.createElement('ul');
         let p=document.createElement('p');
         p.innerText=`company:${ratingDetails.companyName}`;
