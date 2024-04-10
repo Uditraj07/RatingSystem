@@ -34,6 +34,11 @@
             <button class="p-3 rounded-lg ">Search</button>
         </form>
    </div>
+   <div>
+        <div class="details p-3 my-2 bg-purple-500" id="average">
+
+        </div>
+   </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
 
@@ -66,14 +71,31 @@
     })
 
     let form_get=document.querySelector('#get_rating');
-    let form1=form_par.querySelector('form');
+    let form1=form_get.querySelector('form');
     form1.addEventListener('submit',(event)=>{
         event.preventDefault()
         let companyName=event.target.name.value;
+        console.log(companyName)
         fetchByName(companyName).then((result)=>{
-            console.log(result);
+            let ratingDetails=result.data;
+            let sum=0;
+            ratingDetails.forEach((ratingDetail)=>{
+                sum+=ratingDetail.rating
+            })
+            let length=Array.from(ratingDetails).length
+            addCompanyDetails(companyName,Math.round(sum/length));
         })
     })
+
+    function addCompanyDetails(companyName,averageRating){
+        let div=document.querySelector("#average");
+        let div1=document.createElement("div");
+        div1.innerHTML=companyName;
+        let div2=document.createElement('div');
+        div2.innerHTML=averageRating+"";
+        div.append(div1);
+        div.append(div2)
+    }
 
     function changeColor(buttons,index){
         for(let i=0;i<=index;i++){
