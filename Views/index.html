@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div id="post-rating" class="text-center mt-[30px] border-2 border-solid border-pink-500  w-[600px] mx-auto rounded-3xl py-[10px]">
+        <form action="" method="post" class="flex flex-col  justify-center items-center">
+           <label for="companyname">companyName</label><br>
+           <input type="text" name="name" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
+           <label for="pros">Pros</label><br>
+           <textarea id="pro" type="text" name="pros" rows="5"  class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"></textarea><br>
+           <label for="cons">Cons</label><br>
+           <textarea id="cons" type="text" name="cons" rows="5"  class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"></textarea><br>
+            <div class="flex gap-x-1 text-start py-4">
+                <button class="start"><i class="fa-solid fa-star"></i></button>
+                <button class="start"><i class="fa-solid fa-star"></i></button>
+                <button class="start"><i class="fa-solid fa-star"></i></button>
+                <button class="start"><i class="fa-solid fa-star"></i></button>
+                <button class="start"><i class="fa-solid fa-star"></i></button></div>
+           
+           <button type="submit" class="border-2 border-black border-solid rounded-lg bg-purple-500 text-black p-[5px]">Submit</button>
+        </form>   
+   </div>
+
+   <div id="get_rating">
+        <form action="">
+            <label for="name">Company Name</label>
+            <input type="text" name="name" id="" placeholder="Enter Company Name" class="p-4">
+            <button class="p-3 rounded-lg ">Search</button>
+        </form>
+   </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+
+<script>
+    let form_par=document.querySelector('#post-rating');
+    let form=form_par.querySelector('form');
+    form.addEventListener('submit',(event)=>{
+        event.preventDefault()
+        let companyName=event.target.name.value;
+        let pros=form.querySelector("#pro").value;
+        let cons=form.querySelector("#cons").value;
+        let buttons=form.querySelectorAll('button');
+        buttons.forEach((button,index)=>{
+            button.addEventListener('click',(event)=>{
+                event.preventDefault();
+                ratingDetails={
+                    companyName:companyName,
+                    pro:pros,
+                    cons:cons,
+                    rating:index+1
+                }
+                changeColor(buttons,index)
+                submitRating(ratingDetails).then((result)=>{
+                    console.log(result);
+                }).catch((error)=>{
+                    console.log(error)
+                })
+            })
+        })
+    })
+
+    let form_get=document.querySelector('#get_rating');
+    let form1=form_par.querySelector('form');
+    form1.addEventListener('submit',(event)=>{
+        event.preventDefault()
+        let companyName=event.target.name.value;
+        fetchByName(companyName).then((result)=>{
+            console.log(result);
+        })
+    })
+
+    function changeColor(buttons,index){
+        for(let i=0;i<=index;i++){
+            buttons[i].classList.add('text-yellow-600');
+        }
+    }
+    function submitRating(ratingDetails){
+        return axios.post("http://localhost:3000/User/add-rating", ratingDetails)
+    }
+    function fetchByName(companyName){
+        return axios.get(`http://localhost:3000/User/get-rating-details?companyName=${companyName}`);
+    }
+</script>
+</html>
