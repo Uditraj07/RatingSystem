@@ -11,19 +11,19 @@
     <div id="post-rating" class="text-center mt-[30px] border-2 border-solid border-pink-500  w-[600px] mx-auto rounded-3xl py-[10px]">
         <form action="" method="post" class="flex flex-col  justify-center items-center">
            <label for="companyname">companyName</label><br>
-           <input type="text" name="name" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
+           <input id="companyName" type="text" name="name" placeholder="Enter your name" class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"><br>
            <label for="pros">Pros</label><br>
            <textarea id="pro" type="text" name="pros" rows="5"  class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"></textarea><br>
            <label for="cons">Cons</label><br>
            <textarea id="cons" type="text" name="cons" rows="5"  class="border-2 border-black border-solid rounded-lg py-[10px] px-[10px] w-full"></textarea><br>
             <div class="flex gap-x-1 text-start py-4">
-                <button class="start"><i class="fa-solid fa-star"></i></button>
-                <button class="start"><i class="fa-solid fa-star"></i></button>
-                <button class="start"><i class="fa-solid fa-star"></i></button>
-                <button class="start"><i class="fa-solid fa-star"></i></button>
-                <button class="start"><i class="fa-solid fa-star"></i></button></div>
+                <button type="button" class="start"><i class="fa-solid fa-star"></i></button>
+                <button type="button" class="start"><i class="fa-solid fa-star"></i></button>
+                <button type="button" class="start"><i class="fa-solid fa-star"></i></button>
+                <button type="button" class="start"><i class="fa-solid fa-star"></i></button>
+                <button type="button" class="start"><i class="fa-solid fa-star"></i></button></div>
            
-           <button type="submit" class="border-2 border-black border-solid rounded-lg bg-purple-500 text-black p-[5px]">Submit</button>
+           <button id="submit" type="submit" class="border-2 border-black border-solid rounded-lg bg-purple-500 text-black p-[5px]">Submit</button>
         </form>   
    </div>
 
@@ -46,44 +46,39 @@
    </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
-
 <script>
-    let form_par=document.querySelector('#post-rating');
-    let form=form_par.querySelector('form');
-    let buttons=form.querySelectorAll('button');
+    var subBtm = document.getElementById('submit');
+    let buttons=document.querySelectorAll('.start');
     buttons.forEach((button, index) => {
-    button.addEventListener('click', (event) => {
+        button.addEventListener('click', (event) => {
+        event.preventDefault();
         changeColor(buttons, index);
         });
     });
-    form.addEventListener('submit', (event) => {
-    event.preventDefault();
-    let companyName = event.target.name.value;
-    let pros = form.querySelector("#pro").value;
-    let cons = form.querySelector("#cons").value;
-    let rating = 0;
-    buttons.forEach((button) => {
-        if (button.classList.contains('text-yellow-600')) {
-            rating++;
+    subBtm.addEventListener('click',function(e){
+        e.preventDefault()
+        var companyName=document.getElementById('companyName').value;
+        var pros=document.getElementById('pro').value;
+        var cons = document.getElementById('cons').value;
+        var ratingDetail;
+        let rating = 0;
+        buttons.forEach((button) => {
+            if (button.classList.contains('text-yellow-600')) {
+                rating++;
+            }
+        });
+        if(companyName && pros && cons){
+            ratingDetail={
+            companyName:companyName,
+            pro:pros,
+            cons:cons,
+            rating:rating
+            }
+            submitRating(ratingDetail).then((res)=>{
+                console.log(res);
+            })
         }
     });
-    if (rating>0){
-        let ratingDetails = {
-            companyName: companyName,
-            pro: pros,
-            cons: cons,
-            rating: rating
-        };
-        submitRating(ratingDetails)
-            .then((result) => {
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    } else {
-        console.log('Please select a rating before submitting.');
-    }
-});
     let form_get=document.querySelector('#get_rating');
     let form1=form_get.querySelector('form');
     form1.addEventListener('submit',(event)=>{
